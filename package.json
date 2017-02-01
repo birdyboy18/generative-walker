@@ -1,0 +1,20 @@
+{
+  "name": "random-walkers",
+  "version": "0.0.1",
+  "description": "Writing random canvas walkers",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul Bird",
+  "license": "MIT",
+  "jshintConfig": {
+    "esversion": 6
+  },
+  "devDependencies": {
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^1.16.3"
+  }
+}
