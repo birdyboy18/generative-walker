@@ -24,12 +24,22 @@ class Canvas {
 		this.width = this._width;
 		this.height = this._height;
 
+		//used to store the last x and y from the mouse
+		this.mouseX = 0;
+		this.mouseY = 0;
+
 		if (opts.autoResize) {
 			window.onresize = () => {
 				this.width = window.innerWidth;
 				this.height = window.innerHeight;
 			};
 		}
+
+		//add a listener to update the last know x and Y of the mouse on the canvas
+		this.canvas.addEventListener('mousemove', (e) => {
+			this.mouseX = e.clientX;
+			this.mouseY = e.clientY;
+		});
 	}
 
 	get width() {

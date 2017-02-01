@@ -107,12 +107,22 @@ class Canvas {
 		this.width = this._width;
 		this.height = this._height;
 
+		//used to store the last x and y from the mouse
+		this.mouseX = 0;
+		this.mouseY = 0;
+
 		if (opts.autoResize) {
 			window.onresize = () => {
 				this.width = window.innerWidth;
 				this.height = window.innerHeight;
 			};
 		}
+
+		//add a listener to update the last know x and Y of the mouse on the canvas
+		this.canvas.addEventListener('mousemove', (e) => {
+			this.mouseX = e.clientX;
+			this.mouseY = e.clientY;
+		});
 	}
 
 	get width() {
@@ -193,33 +203,48 @@ module.exports = Rectangle;
 const random = __webpack_require__(0);
 //it's actually basically a circle
 class Walker {
-	constructor(x, y) {
+	constructor(x, y, canvas) {
 		this.x = x;
 		this.y = y;
+		this.canvas = canvas;
 	}
 
-	// update() {
-	// 	let choice = parseInt(random(0,4));
-	//
-	// 	if ( choice === 0) {
-	// 		this.x++;
-	// 	} else if (choice === 1) {
-	// 		this.x--;
-	// 	} else if (choice === 2) {
-	// 		this.y++;
-	// 	} else {
-	// 		this.y--;
-	// 	}
-	// }
-
+	// Lets make it so it has a 50% chance to move randomly, if not have it follow go towards the mouse
 	update() {
-		let stepX = parseInt(random(-1,1));
-		let stepY = parseInt(random(-1,1));
+		let prob = Math.random().toFixed(2);
 
-		//console.log(stepX);
+		if (prob < 0.5) {
+			//move randomly
+			this.moveRandomly();
+		} else {
+			//work out direction of the mouse from current position and move towards it.
+			this.moveToMouse();
+		}
+	}
 
-		this.x += stepX;
-		this.y += stepY;
+	moveRandomly() {
+		let prob = Math.random().toFixed(2);
+
+		if (prob < 0.25) { // 25% chance
+			this.x++;
+		} else if (prob < 0.5) { // 25% chance
+			this.y++;
+		} else if (prob < 0.75) { // 25% chance
+			this.x--;
+		} else { // 25% chance
+			this.y--;
+		}
+	}
+
+	moveToMouse() {
+		let x = this.canvas.mouseX;
+		let y = this.canvas.mouseY;
+
+		if (x < this.x) {
+			this.x--;
+		} else {
+			this.x++;
+		}
 	}
 
 	draw(ctx) {
@@ -254,10 +279,10 @@ canvas.renderBackground('#000');
 
 //lets add lots of walkers
 for (let i = 0; i < 1; i++) {
-	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2));
+	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2, canvas));
 }
 
-canvas.addObject(walker);
+// canvas.addObject(walker);
 
 function animate(canvas) {
 	canvas.render();

@@ -13,10 +13,10 @@ canvas.renderBackground('#000');
 
 //lets add lots of walkers
 for (let i = 0; i < 1; i++) {
-	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2));
+	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2, canvas));
 }
 
-canvas.addObject(walker);
+// canvas.addObject(walker);
 
 function animate(canvas) {
 	canvas.render();
