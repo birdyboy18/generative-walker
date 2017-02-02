@@ -72,7 +72,8 @@ class Canvas {
 	}
 
 	render() {
-		//this.ctx.clearRect(0,0,this.width,this.height);
+		this.ctx.clearRect(0,0,this.width,this.height);
+        this.renderBackground('#333');
 		//calls the draw method of all the objects
 		this.objects.forEach((obj) => obj.draw(this.ctx));
 	}

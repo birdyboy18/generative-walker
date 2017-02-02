@@ -155,7 +155,8 @@ class Canvas {
 	}
 
 	render() {
-		//this.ctx.clearRect(0,0,this.width,this.height);
+		this.ctx.clearRect(0,0,this.width,this.height);
+        this.renderBackground('#333');
 		//calls the draw method of all the objects
 		this.objects.forEach((obj) => obj.draw(this.ctx));
 	}
@@ -267,6 +268,7 @@ module.exports = Walker;
 const Canvas = __webpack_require__(1);
 const Rectangle = __webpack_require__(2);
 const Walker = __webpack_require__(3);
+const Circle = __webpack_require__(5);
 
 let canvas = new Canvas('canvas');
 let rect = new Rectangle(100,100, 50, 50, '#fff');
@@ -277,9 +279,9 @@ let iterationLimit = 250;
 
 canvas.renderBackground('#000');
 
-//lets add lots of walkers
+//lets add lots of circles
 for (let i = 0; i < 1; i++) {
-	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2));
+	canvas.addObject(new Circle(100,100,15));
 }
 
 // canvas.addObject(walker);
@@ -290,6 +292,58 @@ function animate(canvas) {
 }
 
 animate(canvas);
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const random = __webpack_require__(0);
+const Vector = __webpack_require__(6);
+//it's actually basically a circle
+class Circle {
+	constructor(x, y, r) {
+        this.location = new Vector(x,y);
+        this.r = r;
+        this.velocity = new Vector(2,3.5);
+	}
+
+	// Lets make it so it has a 50% chance to move randomly, if not have it follow go towards the mouse
+	update() {
+        this.location.add(this.velocity);
+	}
+
+	draw(ctx) {
+		this.update();
+		ctx.fillStyle = '#fff';
+		ctx.beginPath();
+		ctx.arc(this.location.x, this.location.y, this.r, 0, 2 * Math.PI);
+		ctx.closePath();
+		ctx.fill();
+	}
+}
+
+module.exports = Circle;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+
+class Vector {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    add(v) {
+        this.x += v.x;
+        this.y += v.y;
+    }
+}
+
+module.exports = Vector;
 
 
 /***/ })

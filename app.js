@@ -1,6 +1,7 @@
 const Canvas = require('./modules/core/canvas');
 const Rectangle = require('./modules/shapes/rectangle');
 const Walker = require('./modules/shapes/walker');
+const Circle = require('./modules/shapes/circle');
 
 let canvas = new Canvas('canvas');
 let rect = new Rectangle(100,100, 50, 50, '#fff');
@@ -11,9 +12,9 @@ let iterationLimit = 250;
 
 canvas.renderBackground('#000');
 
-//lets add lots of walkers
+//lets add lots of circles
 for (let i = 0; i < 1; i++) {
-	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2));
+	canvas.addObject(new Circle(100,100,15));
 }
 
 // canvas.addObject(walker);
