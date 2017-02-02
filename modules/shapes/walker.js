@@ -1,10 +1,9 @@
 const random = require('../utils/random');
 //it's actually basically a circle
 class Walker {
-	constructor(x, y, canvas) {
+	constructor(x, y) {
 		this.x = x;
 		this.y = y;
-		this.canvas = canvas;
 	}
 
 	// Lets make it so it has a 50% chance to move randomly, if not have it follow go towards the mouse

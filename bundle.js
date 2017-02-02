@@ -144,6 +144,7 @@ class Canvas {
 	}
 
 	addObject(obj) {
+		obj.canvas = this;
 		this.objects.push(obj);
 	}
 
@@ -203,10 +204,9 @@ module.exports = Rectangle;
 const random = __webpack_require__(0);
 //it's actually basically a circle
 class Walker {
-	constructor(x, y, canvas) {
+	constructor(x, y) {
 		this.x = x;
 		this.y = y;
-		this.canvas = canvas;
 	}
 
 	// Lets make it so it has a 50% chance to move randomly, if not have it follow go towards the mouse
@@ -279,7 +279,7 @@ canvas.renderBackground('#000');
 
 //lets add lots of walkers
 for (let i = 0; i < 1; i++) {
-	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2, canvas));
+	canvas.addObject(new Walker(canvas.width / 2, canvas.height / 2));
 }
 
 // canvas.addObject(walker);

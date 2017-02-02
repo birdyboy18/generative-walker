@@ -61,6 +61,7 @@ class Canvas {
 	}
 
 	addObject(obj) {
+		obj.canvas = this;
 		this.objects.push(obj);
 	}
 
