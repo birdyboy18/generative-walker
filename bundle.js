@@ -268,7 +268,8 @@ module.exports = Walker;
 const Canvas = __webpack_require__(1);
 const Rectangle = __webpack_require__(2);
 const Walker = __webpack_require__(3);
-const Circle = __webpack_require__(5);
+const Circle = __webpack_require__(6);
+const Line = __webpack_require__(8);
 
 let canvas = new Canvas('canvas');
 let rect = new Rectangle(100,100, 50, 50, '#fff');
@@ -281,7 +282,8 @@ canvas.renderBackground('#000');
 
 //lets add lots of circles
 for (let i = 0; i < 1; i++) {
-	canvas.addObject(new Circle(100,100,15));
+	//canvas.addObject(new Circle(100,100,15));
+	canvas.addObject(new Line(canvas.width / 2,canvas.height / 2, 300, 200));
 }
 
 // canvas.addObject(walker);
@@ -295,11 +297,12 @@ animate(canvas);
 
 
 /***/ }),
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const random = __webpack_require__(0);
-const Vector = __webpack_require__(6);
+const Vector = __webpack_require__(7);
 //it's actually basically a circle
 class Circle {
 	constructor(x, y, r) {
@@ -327,7 +330,7 @@ module.exports = Circle;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 
@@ -337,13 +340,74 @@ class Vector {
         this.y = y;
     }
 
+	negative() {
+		let x = this.x * -1;
+		let y = this.y * -1;
+		return new Vector(x, y);
+	}
+
     add(v) {
-        this.x += v.x;
-        this.y += v.y;
+        let x = this.x + v.x;
+        let y = this.y + v.y;
+		return new Vector(x, y);
     }
+
+	sub(v) {
+		let x = this.x - v.x;
+		let y = this.y - v.y;
+		return new Vector(x, y);
+	}
+
+	multi(val) {
+		this.x = this.x * val;
+		this.y = this.y * val;
+		return new Vector(this.x, this.y);
+	}
+
+	divide(val) {
+		this.x = this.x / val;
+		this.y = this.y / val;
+		return new Vector(this.x, this.y);
+	}
+
+	magnitude() {
+		return Math.sqrt((this.x^2) + (this.y^2));
+	}
 }
 
 module.exports = Vector;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Vector = __webpack_require__(7);
+
+class Line {
+	constructor(x1,y1,x2,y2) {
+		this.vec1 = new Vector(x1,y1);
+		this.vec2 = new Vector(x2,y2);
+	}
+
+	update() {
+		this.vec2 = new Vector(this.canvas.mouseX, this.canvas.mouseY);
+
+	}
+
+	draw(ctx) {
+		this.update();
+
+		let end = this.vec1.sub(this.vec2);
+		ctx.beginPath();
+		ctx.moveTo(this.vec1.x, this.vec1.y);
+		ctx.lineTo(end.x, end.y);
+		ctx.strokeStyle = '#fff';
+		ctx.stroke();
+	}
+}
+
+module.exports = Line;
 
 
 /***/ })
