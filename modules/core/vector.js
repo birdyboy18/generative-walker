@@ -17,10 +17,18 @@ class Vector {
 		return new Vector(x, y);
     }
 
+	static add(vec1, vec2) {
+		return new Vector(vec1.x + vec2.x, vec2.x + vec2.y);
+	}
+
 	sub(v) {
 		let x = this.x - v.x;
 		let y = this.y - v.y;
 		return new Vector(x, y);
+	}
+
+	static sub(vec1, vec2) {
+		return new Vector(vec1.x - vec2.x, vec2.x - vec2.y);
 	}
 
 	multi(val) {
@@ -36,7 +44,7 @@ class Vector {
 	}
 
 	magnitude() {
-		return Math.sqrt((this.x^2) + (this.y^2));
+		return Math.sqrt((this.x * this.x) + (this.y * this.y));
 	}
 
 	normalise() {
@@ -46,6 +54,14 @@ class Vector {
 		} else {
 			return 0;
 		}
+	}
+
+	limit(max, factor) {
+		if (Math.abs(this.magnitude()) > max) {
+			this.x *= factor;
+			this.y *= factor;
+		}
+		return this;
 	}
 }
 

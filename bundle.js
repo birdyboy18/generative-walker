@@ -269,24 +269,18 @@ const Canvas = __webpack_require__(1);
 const Rectangle = __webpack_require__(2);
 const Walker = __webpack_require__(3);
 const Circle = __webpack_require__(6);
+const MoverCircle = __webpack_require__(9);
 const Line = __webpack_require__(8);
+const random = __webpack_require__(0);
 
 let canvas = new Canvas('canvas');
-let rect = new Rectangle(100,100, 50, 50, '#fff');
-let walker = new Walker(canvas.width / 2, canvas.height / 2);
-
-let i = 0;
-let iterationLimit = 250;
 
 canvas.renderBackground('#000');
 
 //lets add lots of circles
-for (let i = 0; i < 1; i++) {
-	//canvas.addObject(new Circle(100,100,15));
-	canvas.addObject(new Line(0, 0, 300, 200));
+for (let i = 0; i < 100; i++) {
+	canvas.addObject(new MoverCircle(random(0,canvas.width),random(0, canvas.height),random(1,6),random(1,6),random(2, 10), `rgba(255,255,255,${ random(0.1, 1) })`));
 }
-
-// canvas.addObject(walker);
 
 function animate(canvas) {
 	canvas.render();
@@ -352,10 +346,18 @@ class Vector {
 		return new Vector(x, y);
     }
 
+	static add(vec1, vec2) {
+		return new Vector(vec1.x + vec2.x, vec2.x + vec2.y);
+	}
+
 	sub(v) {
 		let x = this.x - v.x;
 		let y = this.y - v.y;
 		return new Vector(x, y);
+	}
+
+	static sub(vec1, vec2) {
+		return new Vector(vec1.x - vec2.x, vec2.x - vec2.y);
 	}
 
 	multi(val) {
@@ -371,7 +373,7 @@ class Vector {
 	}
 
 	magnitude() {
-		return Math.sqrt((this.x^2) + (this.y^2));
+		return Math.sqrt((this.x * this.x) + (this.y * this.y));
 	}
 
 	normalise() {
@@ -381,6 +383,14 @@ class Vector {
 		} else {
 			return 0;
 		}
+	}
+
+	limit(max, factor) {
+		if (Math.abs(this.magnitude()) > max) {
+			this.x *= factor;
+			this.y *= factor;
+		}
+		return this;
 	}
 }
 
@@ -419,6 +429,84 @@ class Line {
 }
 
 module.exports = Line;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Mover = __webpack_require__(10);
+
+class Circle extends Mover {
+	constructor(x,y,vx,vy,r, fill = '#fff') {
+		super(x,y,vx,vy);
+		this.r = r;
+		this.fill = fill;
+	}
+
+	draw(ctx) {
+		this.update();
+		ctx.fillStyle = this.fill;
+		ctx.beginPath();
+		ctx.arc(this.location.x, this.location.y, this.r, 0, 2 * Math.PI);
+		ctx.closePath();
+		ctx.fill();
+	}
+}
+
+module.exports = Circle;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Vector = __webpack_require__(7);
+const random = __webpack_require__(0);
+/**
+* A super simple class that should be extended and adds motion capabilities to it.
+*
+*/
+class Mover {
+	constructor(x,y,vx,vy) {
+		this.location = new Vector(x,y);
+		this.velocity = new Vector(0,0);
+		this.acceleration = new Vector(random(0.01, 0.1),random(0.01, 0.03));
+	}
+
+	update() {
+		//this.checkEdges();
+		// this.velocity = this.velocity.add(this.acceleration);
+		// this.velocity = this.velocity.limit(3, 0.75);
+		// this.location = this.location.add(this.velocity);
+		let mouse = new Vector(this.canvas.mouseX, this.canvas.mouseY);
+		let dir = Vector.sub(mouse, this.location).normalise().multi(2);
+		this.acceleration = dir;
+		this.velocity = this.velocity.add(this.acceleration);
+		this.velocity = this.velocity.limit(10, 0.75);
+		this.location = this.location.add(this.velocity);
+	}
+
+	draw(ctx) {
+		//this.update();
+	}
+
+	checkEdges() {
+		if (this.location.x > this.canvas.width) {
+			this.location.x = 0;
+		} else if (this.location.x < 0) {
+			this.location.x = this.canvas.width;
+		}
+
+		if (this.location.y > this.canvas.height) {
+			this.location.y = 0;
+		} else if (this.location.y < 0) {
+			this.location.y = this.canavs.height;
+		}
+	}
+}
+
+module.exports = Mover;
 
 
 /***/ })
