@@ -16,7 +16,7 @@ canvas.renderBackground('#000');
 //lets add lots of circles
 for (let i = 0; i < 1; i++) {
 	//canvas.addObject(new Circle(100,100,15));
-	canvas.addObject(new Line(canvas.width / 2,canvas.height / 2, 300, 200));
+	canvas.addObject(new Line(0, 0, 300, 200));
 }
 
 // canvas.addObject(walker);

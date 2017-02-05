@@ -7,14 +7,16 @@ class Line {
 	}
 
 	update() {
-		this.vec2 = new Vector(this.canvas.mouseX, this.canvas.mouseY);
+		this.vec2 = new Vector(this.canvas.mouseX, this.canvas.mouseY).normalise().multi(10);
+		//this.vec2 = this.vec2.multi(0.5);
 
+		//console.log(this.vec2.normalise());
 	}
 
 	draw(ctx) {
 		this.update();
 
-		let end = this.vec1.sub(this.vec2);
+		let end = this.vec1.add(this.vec2);
 		ctx.beginPath();
 		ctx.moveTo(this.vec1.x, this.vec1.y);
 		ctx.lineTo(end.x, end.y);

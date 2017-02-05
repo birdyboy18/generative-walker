@@ -283,7 +283,7 @@ canvas.renderBackground('#000');
 //lets add lots of circles
 for (let i = 0; i < 1; i++) {
 	//canvas.addObject(new Circle(100,100,15));
-	canvas.addObject(new Line(canvas.width / 2,canvas.height / 2, 300, 200));
+	canvas.addObject(new Line(0, 0, 300, 200));
 }
 
 // canvas.addObject(walker);
@@ -373,6 +373,15 @@ class Vector {
 	magnitude() {
 		return Math.sqrt((this.x^2) + (this.y^2));
 	}
+
+	normalise() {
+		let mag = this.magnitude();
+		if (mag !== 0) {
+			return this.divide(mag);
+		} else {
+			return 0;
+		}
+	}
 }
 
 module.exports = Vector;
@@ -391,14 +400,16 @@ class Line {
 	}
 
 	update() {
-		this.vec2 = new Vector(this.canvas.mouseX, this.canvas.mouseY);
+		this.vec2 = new Vector(this.canvas.mouseX, this.canvas.mouseY).normalise().multi(10);
+		//this.vec2 = this.vec2.multi(0.5);
 
+		//console.log(this.vec2.normalise());
 	}
 
 	draw(ctx) {
 		this.update();
 
-		let end = this.vec1.sub(this.vec2);
+		let end = this.vec1.add(this.vec2);
 		ctx.beginPath();
 		ctx.moveTo(this.vec1.x, this.vec1.y);
 		ctx.lineTo(end.x, end.y);

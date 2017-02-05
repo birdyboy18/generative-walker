@@ -38,6 +38,15 @@ class Vector {
 	magnitude() {
 		return Math.sqrt((this.x^2) + (this.y^2));
 	}
+
+	normalise() {
+		let mag = this.magnitude();
+		if (mag !== 0) {
+			return this.divide(mag);
+		} else {
+			return 0;
+		}
+	}
 }
 
 module.exports = Vector;
